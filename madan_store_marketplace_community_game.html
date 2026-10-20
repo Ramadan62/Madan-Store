@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madan Store - Marketplace Akun Game & Komunitas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                            accent: '#06b6d4',
+                            neon: '#a855f7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.2);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+        }
+        .neon-text {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-purple-500 selection:text-white">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 glass border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('marketplace')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center font-black text-xl shadow-lg neon-glow">
+                    M
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">MADAN STORE</span>
+                    <span class="hidden sm:inline-block text-xs bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded-full ml-2 border border-purple-500/30">Official Rekber</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('marketplace')" id="nav-marketplace" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-indigo-600 shadow">
+                    <i class="fa-solid font-bold fa-store mr-2"></i>Jual Beli Akun
+                </button>
+                <button onclick="switchTab('community')" id="nav-community" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-users mr-2"></i>Komunitas & Foto
+                </button>
+                <button onclick="switchTab('github-guide')" id="nav-github-guide" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-brands fa-github mr-2"></i>Cara Hosting GitHub
+                </button>
+            </nav>
+
+            <!-- User Auth & Action Buttons -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openModal('createListingModal')" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all shadow-md hover:shadow-purple-500/25">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Jual Akun</span>
+                </button>
+
+                <div id="authContainer">
+                    <!-- Dynamic rendering: Login Button or User Profile Dropdown -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Sub-bar -->
+        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-slate-800 py-2 px-2 text-xs font-medium text-slate-400">
+            <button onclick="switchTab('marketplace')" id="mobile-nav-marketplace" class="flex flex-col items-center p-1 text-indigo-400">
+                <i class="fa-solid fa-store text-base mb-0.5"></i> Market
+            </button>
+            <button onclick="switchTab('community')" id="mobile-nav-community" class="flex flex-col items-center p-1">
+                <i class="fa-solid fa-users text-base mb-0.5"></i> Feed
+            </button>
+            <button onclick="openModal('createListingModal')" class="flex flex-col items-center p-1 text-purple-400">
+                <i class="fa-solid fa-circle-plus text-base mb-0.5"></i> Jual
+            </button>
+            <button onclick="switchTab('github-guide')" id="mobile-nav-github-guide" class="flex flex-col items-center p-1">
+                <i class="fa-brands fa-github text-base mb-0.5"></i> Github
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950/20 to-slate-900 border-b border-slate-800 py-10 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="space-y-4 max-w-2xl text-center md:text-left">
+                <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-1 rounded-full text-indigo-300 text-xs font-medium">
+                    <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Admin Madan Siap Melayani Rekber 24/7</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                    Jual Beli Akun Game Safe & Safe Trade dengan <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Admin Madan</span>
+                </h1>
+                <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Platform terbaik transaksi akun Genshin Impact, ZZZ, HSR, HI3, MLBB, Free Fire, PUBG & game favoritmu. Dilengkapi Komunitas Gambar & AI Assistant untuk bertransaksi tanpa ragu.
+                </p>
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Madan,%20saya%20ingin%20tanya%20rekber" target="_blank" class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/30">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Contact Admin Madan</span>
+                    </a>
+                    <button onclick="openModal('createPostModal')" class="inline-flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Posting Foto Game</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Badge Banner Card -->
+            <div class="w-full md:w-auto flex-shrink-0">
+                <div class="glass p-5 rounded-2xl border border-indigo-500/20 max-w-sm mx-auto shadow-2xl relative">
+                    <div class="absolute -top-3 -right-3 bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
+                        Verified Admin
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Admin Madan" class="w-16 h-16 rounded-2xl object-cover border-2 border-purple-500">
+                        <div>
+                            <div class="flex items-center space-x-1">
+                                <h3 class="font-bold text-lg text-white">Madan (Owner)</h3>
+                                <i class="fa-solid fa-circle-check text-blue-400 text-sm"></i>
+                            </div>
+                            <p class="text-xs text-purple-300 font-medium">Rekber / Middleman Resmi</p>
+                            <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i>Garansi Safe Trading 100%</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 flex justify-between items-center text-xs text-slate-400">
+                        <span>Status WhatsApp: <strong class="text-emerald-400">Online</strong></span>
+                        <span class="text-indigo-400 font-semibold">Fast Response</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT CONTAINERS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+        <!-- TAB 1: MARKETPLACE -->
+        <section id="tab-marketplace" class="space-y-6">
+            
+            <!-- Filters & Search Bar -->
+            <div class="glass p-4 rounded-2xl space-y-4">
+                <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                    <!-- Search input -->
+                    <div class="relative w-full md:w-80">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="filterListings()" placeholder="Cari judul akun, spesifikasi, server..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-all">
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div class="flex items-center space-x-2 overflow-x-auto w-full pb-2 md:pb-0 scrollbar-none">
+                        <button onclick="setCategoryFilter('ALL')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-purple-600 text-white transition-all" data-cat="ALL">
+                            Semua Game
+                        </button>
+                        <button onclick="setCategoryFilter('Genshin Impact')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Genshin Impact">
+                            Genshin Impact
+                        </button>
+                        <button onclick="setCategoryFilter('Zenless Zone Zero')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Zenless Zone Zero">
+                            Zenless Zone Zero
+                        </button>
+                        <button onclick="setCategoryFilter('Honkai: Star Rail')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Honkai: Star Rail">
+                            Honkai: Star Rail
+                        </button>
+                        <button onclick="setCategoryFilter('Honkai Impact 3rd')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Honkai Impact 3rd">
+                            Honkai Impact 3rd
+                        </button>
+                        <button onclick="setCategoryFilter('Mobile Legends')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Mobile Legends">
+                            Mobile Legends
+                        </button>
+                        <button onclick="setCategoryFilter('Free Fire')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Free Fire">
+                            Free Fire
+                        </button>
+                        <button onclick="setCategoryFilter('PUBG Mobile')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="PUBG Mobile">
+                            PUBG Mobile
+                        </button>
+                        <button onclick="setCategoryFilter('Lainnya')" class="cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all" data-cat="Lainnya">
+                            Game Lainnya
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketplace Listing Grid -->
+            <div id="listingsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamic Content Load via JS -->
+            </div>
+            
+            <div id="noListingsMsg" class="hidden text-center py-16 glass rounded-2xl">
+                <i class="fa-solid fa-ghost text-5xl text-slate-600 mb-3"></i>
+                <h3 class="text-lg font-bold text-slate-300">Belum ada akun untuk kategori ini</h3>
+                <p class="text-sm text-slate-500 mt-1">Jadilah yang pertama memposting akun game kamu!</p>
+                <button onclick="openModal('createListingModal')" class="mt-4 bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs px-4 py-2 rounded-xl transition">
+                    + Jual Akun Sekarang
+                </button>
+            </div>
+        </section>
+
+
+        <!-- TAB 2: COMMUNITY & PHOTO FEED -->
+        <section id="tab-community" class="hidden space-y-6 max-w-3xl mx-auto">
+            <!-- Create Feed Input Box -->
+            <div class="glass p-4 rounded-2xl flex space-x-3 items-center">
+                <img id="feedUserAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Guest" class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700">
+                <button onclick="openModal('createPostModal')" class="flex-grow text-left bg-slate-900 border border-slate-700/70 hover:border-purple-500/50 rounded-xl px-4 py-2.5 text-sm text-slate-400 transition">
+                    Apa yang ingin kamu bagikan/pamerkan hari ini?
+                </button>
+                <button onclick="openModal('createPostModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white p-2.5 rounded-xl transition">
+                    <i class="fa-solid fa-image"></i>
+                </button>
+            </div>
+
+            <!-- Feed Posts Container -->
+            <div id="communityFeedContainer" class="space-y-6">
+                <!-- Dynamic Content Load via JS -->
+            </div>
+        </section>
+
+
+        <!-- TAB 3: GITHUB DEPLOYMENT GUIDE -->
+        <section id="tab-github-guide" class="hidden space-y-6">
+            <div class="glass p-6 sm:p-8 rounded-3xl border border-indigo-500/30 space-y-6 max-w-4xl mx-auto">
+                <div class="flex items-center space-x-4 border-b border-slate-800 pb-5">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-white text-2xl border border-slate-700">
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Panduan Upload Website Ini ke GitHub Pages (100% Gratis)</h2>
+                        <p class="text-xs text-slate-400">Ikuti langkah mudah ini untuk menjadikan website toko/komunitas milikmu online gratis selamanya.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 text-sm text-slate-300">
+                    <div class="flex items-start space-x-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-600 text-white font-bold flex items-center justify-center">1</span>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Buat Repositori Baru di GitHub</h3>
+                            <p class="text-slate-400 mt-1">Buka <a href="https://github.com" target="_blank" class="text-indigo-400 underline">GitHub.com</a>, buat akun (jika belum ada), lalu klik tombol hijau <strong>"New"</strong> atau <strong>"+"</strong> di pojok kanan atas untuk membuat repositori baru.</p>
+                            <p class="text-xs text-purple-400 mt-1">Beri nama repositori misalnya: <code class="bg-slate-800 px-2 py-0.5 rounded">madan-store</code> dan pastikan diset ke <strong>Public</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-600 text-white font-bold flex items-center justify-center">2</span>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Buat File `index.html`</h3>
+                            <p class="text-slate-400 mt-1">Di dalam repositori baru kamu, klik link <strong>"creating a new file"</strong>.</p>
+                            <p class="text-slate-400 mt-1">Beri nama file wajib: <strong class="text-emerald-400">index.html</strong> (jangan ganti nama lain agar otomatis dibaca GitHub Pages).</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-600 text-white font-bold flex items-center justify-center">3</span>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Copy & Paste Kode Lengkap</h3>
+                            <p class="text-slate-400 mt-1">Salin semua kode HTML/JS dari file ini, lalu pastekan ke dalam editor file `index.html` di GitHub. Setelah itu scroll ke bawah dan klik <strong>"Commit changes..."</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-600 text-white font-bold flex items-center justify-center">4</span>
+                        <div>
+                            <h3 class="font-bold text-white text-base">Aktifkan Fitur GitHub Pages</h3>
+                            <p class="text-slate-400 mt-1">Buka tab <strong>Settings</strong> di menu atas repositori kamu -> pilih menu <strong>Pages</strong> di sidebar kiri.</p>
+                            <p class="text-slate-400 mt-1">Pada bagian <em>Build and deployment</em> -> <em>Branch</em>: Ubah dari <u>None</u> menjadi <strong class="text-purple-300">main</strong> (atau master) -> Klik <strong>Save</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-emerald-950/40 to-teal-950/40 border border-emerald-500/30 p-4 rounded-2xl text-emerald-300 flex items-center space-x-3">
+                        <i class="fa-solid fa-circle-check text-2xl text-emerald-400"></i>
+                        <div>
+                            <span class="font-bold block">Selesai! Website Kamu Sudah Live</span>
+                            <span class="text-xs text-emerald-400/80">Tunggu 1-2 menit, domain website kamu akan siap diakses di URL: <code class="bg-black/40 px-2 py-0.5 rounded text-white">https://username-github-kamu.github.io/madan-store/</code></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING LIVE AI CHATBOT WIDGET -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <!-- Chatbot Toggle Button -->
+        <button id="aiChatToggle" onclick="toggleAIChat()" class="relative group bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-purple-400/40">
+            <i class="fa-solid fa-robot text-2xl group-hover:rotate-12 transition-transform"></i>
+            <span class="absolute -top-1 -right-1 flex h-4 w-4">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-4 w-4 bg-pink-500"></span>
+            </span>
+        </button>
+
+        <!-- Chatbot Drawer Window -->
+        <div id="aiChatBox" class="hidden absolute bottom-16 right-0 w-[90vw] sm:w-[380px] h-[500px] glass rounded-3xl shadow-2xl border border-purple-500/30 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-3.5 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+                            Madan Store AI Assistant
+                            <span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded border border-emerald-500/30">Online</span>
+                        </h4>
+                        <p class="text-[11px] text-slate-400">Tanya seputar rekber, stok akun & panduan</p>
+                    </div>
+                </div>
+                <button onclick="toggleAIChat()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatMessages" class="flex-grow p-4 overflow-y-auto space-y-3 text-xs">
+                <!-- Welcome Bot Message -->
+                <div class="flex items-start space-x-2">
+                    <div class="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs flex-shrink-0">
+                        AI
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700/80 p-3 rounded-2xl rounded-tl-none text-slate-200 space-y-2">
+                        <p>Halo Gamers! 🎮 Saya <strong>Madan AI Assistant</strong>.</p>
+                        <p>Ada yang bisa saya bantu? Kamu bisa menanyakan:</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-1">
+                            <li>Cara aman jual/beli akun (Rekber)</li>
+                            <li>Nomor Kontak Admin Madan</li>
+                            <li>Rekomendasi akun game murah</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Questions Buttons -->
+            <div class="p-2 bg-slate-900/80 border-t border-slate-800 flex gap-1.5 overflow-x-auto scrollbar-none text-[11px]">
+                <button onclick="sendQuickQuestion('Siapa Admin Madan & Kontak WA?')" class="bg-slate-800 hover:bg-purple-900/50 text-purple-300 px-2.5 py-1 rounded-lg border border-purple-500/30 whitespace-nowrap">
+                    📞 Kontak Admin Madan
+                </button>
+                <button onclick="sendQuickQuestion('Bagaimana cara transaksi Rekber aman?')" class="bg-slate-800 hover:bg-purple-900/50 text-purple-300 px-2.5 py-1 rounded-lg border border-purple-500/30 whitespace-nowrap">
+                    🛡️ Cara Rekber Safe
+                </button>
+            </div>
+
+            <!-- Input Form -->
+            <form onsubmit="handleAIChatSubmit(event)" class="p-3 bg-slate-900 border-t border-slate-800 flex gap-2">
+                <input type="text" id="aiChatInput" placeholder="Tulis pertanyaanmu di sini..." class="flex-grow bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded-xl text-xs font-semibold transition">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODALS SECTION -->
+
+    <!-- MODAL 1: AUTH / LOGIN -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass max-w-md w-full rounded-3xl p-6 border border-slate-700 shadow-2xl relative">
+            <button onclick="closeModal('authModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center space-y-2 mb-6">
+                <div class="w-12 h-12 bg-indigo-600/30 border border-indigo-500/40 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Login / Register Gamers</h3>
+                <p class="text-xs text-slate-400">Masukan nama kamu untuk posting akun atau foto komunitas</p>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nama / Username Kamu</label>
+                    <input type="text" id="authUsernameInput" required placeholder="Contoh: MadanGamer99" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Pilih Avatar Game</label>
+                    <select id="authAvatarSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
+                        <option value="Madan">Madan Avatar Special</option>
+                        <option value="Aether">Genshin Traveler</option>
+                        <option value="Belle">ZZZ Proxy</option>
+                        <option value="Caelus">Trailblazer HSR</option>
+                        <option value="Cyberpro">Cyber Gamer</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-lg">
+                    Masuk Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODAL 2: BUAT LISTING JUAL AKUN GAME -->
+    <div id="createListingModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass max-w-lg w-full rounded-3xl p-6 border border-purple-500/30 shadow-2xl relative my-8">
+            <button onclick="closeModal('createListingModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex items-center space-x-3 mb-5 border-b border-slate-800 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Jual Akun Game</h3>
+                    <p class="text-xs text-slate-400">Isi detail akun yang ingin kamu jual di marketplace</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleCreateListing(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Pilih Game *</label>
+                    <select id="listingGameSelect" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                        <option value="Genshin Impact">Genshin Impact</option>
+                        <option value="Zenless Zone Zero">Zenless Zone Zero</option>
+                        <option value="Honkai: Star Rail">Honkai: Star Rail</option>
+                        <option value="Honkai Impact 3rd">Honkai Impact 3rd</option>
+                        <option value="Mobile Legends">Mobile Legends</option>
+                        <option value="Free Fire">Free Fire</option>
+                        <option value="PUBG Mobile">PUBG Mobile</option>
+                        <option value="Lainnya">Game Lainnya</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Judul / Highlight Utama Akun *</label>
+                    <input type="text" id="listingTitleInput" required placeholder="Contoh: C6 Arlecchino + Weapon Sign / Akun Sultan Full Skin MLBB" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Harga (IDR / Rp) *</label>
+                        <input type="number" id="listingPriceInput" required placeholder="150000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Server / Region</label>
+                        <input type="text" id="listingServerInput" placeholder="Asia / Indonesia" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">URL Foto Screenshot Akun *</label>
+                    <input type="url" id="listingImageInput" required placeholder="Paste URL gambar (misal imgur/postimg) atau gunakan default" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                    <p class="text-[10px] text-slate-500 mt-1">Tips: Gunakan link gambar publik dari internet atau kirim ke admin.</p>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Deskripsi Lengkap Spesifikasi Akun *</label>
+                    <textarea id="listingDescInput" rows="3" required placeholder="Jelaskan detail spesifikasi: Karakter B5, AR/Level, Login Type, Minus (jika ada)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+
+                <div class="bg-purple-900/20 border border-purple-500/30 p-3 rounded-xl flex items-center space-x-2 text-[11px] text-purple-300">
+                    <i class="fa-solid fa-shield-halved text-base text-purple-400"></i>
+                    <span>Semua transaksi akun akan diarahkan melalui <strong>Admin Madan</strong> sebagai Rekber Resmi.</span>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-lg">
+                    Publikasikan Akun Ke Marketplace
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODAL 3: BUAT POSTINGAN KOMUNITAS / FOTO STATUS -->
+    <div id="createPostModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass max-w-md w-full rounded-3xl p-6 border border-slate-700 shadow-2xl relative">
+            <button onclick="closeModal('createPostModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300">
+                    <i class="fa-solid fa-camera"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Post Feed Komunitas</h3>
+                    <p class="text-xs text-slate-400">Bagikan screenshot gacha, pamerkan build, atau diskusi</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleCreatePost(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Pesan / Status *</label>
+                    <textarea id="postContentInput" rows="3" required placeholder="Tuliskan sesuatu... (misal: 'Hoki banget gacha hari ini dapet Rate Off!')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">URL Foto (Opsional)</label>
+                    <input type="url" id="postImageInput" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition text-xs shadow-lg">
+                    Posting Ke Feed Komunitas
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODAL 4: DETAIL AKUN & TOMBOL BELI -->
+    <div id="detailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass max-w-2xl w-full rounded-3xl p-6 border border-slate-700 shadow-2xl relative my-8">
+            <button onclick="closeModal('detailModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div id="detailModalContent" class="space-y-5">
+                <!-- Dynamic Content via JS -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 mt-12 py-8 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <span class="font-bold text-slate-300">MADAN STORE</span> &copy; 2026 - Official Game Marketplace & Community.
+                <p class="text-[11px] text-slate-600 mt-0.5">Dikembangkan untuk kemudahan Jual/Beli Akun Game & Komunitas Gamers Indonesia.</p>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <a href="https://wa.me/6281234567890" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1">
+                    <i class="fa-brands fa-whatsapp"></i> WA Admin Madan
+                </a>
+                <span>•</span>
+                <button onclick="switchTab('github-guide')" class="hover:text-purple-400 transition">
+                    <i class="fa-brands fa-github"></i> Host di GitHub
+                </button>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- DATA STATE (Local Storage + Initial Mock Data) ---
+        const ADMIN_NAME = "Madan";
+        const ADMIN_WA = "6281234567890"; // Format WhatsApp Internasional
+
+        let currentUser = JSON.parse(localStorage.getItem('madan_user')) || {
+            username: 'MadanGamer',
+            avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Madan'
+        };
+
+        let currentCategoryFilter = 'ALL';
+
+        // Mock Listings Jual Akun
+        let listings = JSON.parse(localStorage.getItem('madan_listings')) || [
+            {
+                id: 'list-1',
+                game: 'Genshin Impact',
+                title: 'AR 58 Genshin Impact - C2 Raiden + Signature, Nahida, Kazuha, Hu Tao C1',
+                price: 450000,
+                server: 'Asia',
+                seller: 'Madan (Verified)',
+                image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80',
+                description: 'Akun wangi no minus, Pity event 50 (guaranteed). Artifact build rapi gampang Spiral Abyss 12-3. Login Hoyoverse bersih (email replace ke milik pembeli).',
+                badge: 'Hot Offer',
+                date: 'Hari ini'
+            },
+            {
+                id: 'list-2',
+                game: 'Zenless Zone Zero',
+                title: 'Akun ZZZ Level 45 - Ellen Joe C1 + Signature Weapon + Zhu Yuan',
+                price: 320000,
+                server: 'Asia',
+                seller: 'ProxyKing',
+                image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&auto=format&fit=crop&q=80',
+                description: 'Build Ellen Joe mantap, Monopoli Signal Shop masih utuh. Inter-Knot Level 45, MC Cewek.',
+                badge: 'Verified',
+                date: 'Kemarin'
+            },
+            {
+                id: 'list-3',
+                game: 'Mobile Legends',
+                title: 'MLBB All Role Sultan - Skin Legend Granger, 12 Collector, StarLight Full',
+                price: 1250000,
+                server: 'Indonesia',
+                seller: 'MythicSeller',
+                image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&auto=format&fit=crop&q=80',
+                description: 'Winrate 68%, Hero Unlocked Semua, Emblem Max. Pensiun kerja. Beli via Rekber Admin Madan aman 100%.',
+                badge: 'Sultan',
+                date: '2 hari lalu'
+            },
+            {
+                id: 'list-4',
+                game: 'Honkai: Star Rail',
+                title: 'HSR Trailblazer Lv 70 - Acheron E2S1, Firefly, Ruan Mei, Sparkle',
+                price: 680000,
+                server: 'Asia',
+                seller: 'StarRailer',
+                image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80',
+                description: 'MoC & Pure Fiction selalu Bintang 36. Stellar Jade tersisa 4500+. Log Hoyoverse siap ganti email.',
+                badge: 'Endgame',
+                date: '3 hari lalu'
+            }
+        ];
+
+        // Mock Community Posts
+        let posts = JSON.parse(localStorage.getItem('madan_posts')) || [
+            {
+                id: 'post-1',
+                author: 'Madan (Admin)',
+                avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Madan',
+                time: '2 jam yang lalu',
+                content: 'Halo teman-teman gamers! Selamat datang di website Madan Store. Pastikan selalu bertransaksi jual/beli akun menggunakan jasa Rekber resmi melalui WhatsApp Admin Madan ya! 🛡️🎮',
+                image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&auto=format&fit=crop&q=80',
+                likes: 24,
+                comments: [
+                    { name: 'Kael', text: 'Siap min Madan, makin keren websitenya!' },
+                    { name: 'Rian', text: 'Rekber Madan dari dulu fast respon mantap.' }
+                ]
+            },
+            {
+                id: 'post-2',
+                author: 'GachaLover',
+                avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Gacha',
+                time: '5 jam yang lalu',
+                content: 'Akhirnya dapet Raiden Shogun di pity 25 tanpa rate off! Pamer screenshot gacha dulu gaes 🔥',
+                image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80',
+                likes: 12,
+                comments: []
+            }
+        ];
+
+        // --- APP INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAuthContainer();
+            renderListings();
+            renderCommunityFeed();
+        });
+
+        // --- NAVIGATION & TABS ---
+        function switchTab(tabName) {
+            const tabs = ['marketplace', 'community', 'github-guide'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                const mobileNavBtn = document.getElementById(`mobile-nav-${t}`);
+
+                if (t === tabName) {
+                    el.classList.remove('hidden');
+                    if (navBtn) {
+                        navBtn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-white bg-indigo-600 shadow";
+                    }
+                    if (mobileNavBtn) {
+                        mobileNavBtn.classList.add('text-indigo-400');
+                    }
+                } else {
+                    el.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800";
+                    }
+                    if (mobileNavBtn) {
+                        mobileNavBtn.classList.remove('text-indigo-400');
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- AUTH & USER PROFILE ---
+        function renderAuthContainer() {
+            const container = document.getElementById('authContainer');
+            if (currentUser) {
+                container.innerHTML = `
+                    <div class="flex items-center space-x-2 bg-slate-900 border border-slate-700 p-1.5 pr-3 rounded-xl">
+                        <img src="${currentUser.avatar}" class="w-7 h-7 rounded-lg bg-slate-800">
+                        <span class="text-xs font-semibold text-white max-w-[100px] truncate">${currentUser.username}</span>
+                        <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-red-400 ml-1" title="Logout">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                `;
+                document.getElementById('feedUserAvatar').src = currentUser.avatar;
+            } else {
+                container.innerHTML = `
+                    <button onclick="openModal('authModal')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-3.5 py-2 rounded-xl text-xs transition">
+                        <i class="fa-solid fa-user mr-1.5"></i>Login / Daftar
+                    </button>
+                `;
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUsernameInput').value.trim();
+            const avatarChoice = document.getElementById('authAvatarSelect').value;
+            
+            currentUser = {
+                username: username,
+                avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(avatarChoice + '_' + username)}`
+            };
+
+            localStorage.setItem('madan_user', JSON.stringify(currentUser));
+            renderAuthContainer();
+            closeModal('authModal');
+            showToast(`Selamat datang kembali, ${username}!`);
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('madan_user');
+            renderAuthContainer();
+            showToast('Berhasil logout.');
+        }
+
+
+        // --- MARKETPLACE LISTINGS LOGIC ---
+        function renderListings() {
+            const container = document.getElementById('listingsGrid');
+            const noMsg = document.getElementById('noListingsMsg');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = listings.filter(item => {
+                const matchCat = (currentCategoryFilter === 'ALL') || (item.game === currentCategoryFilter);
+                const matchSearch = item.title.toLowerCase().includes(searchVal) || 
+                                    item.game.toLowerCase().includes(searchVal) || 
+                                    item.description.toLowerCase().includes(searchVal);
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                noMsg.classList.remove('hidden');
+                return;
+            } else {
+                noMsg.classList.add('hidden');
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300">
+                    <div>
+                        <!-- Thumbnail Image -->
+                        <div class="relative h-44 w-full bg-slate-900 overflow-hidden">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80'">
+                            <div class="absolute top-2 left-2 bg-slate-950/80 backdrop-blur-md text-purple-300 border border-purple-500/30 text-[10px] font-bold px-2.5 py-1 rounded-lg">
+                                ${item.game}
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-emerald-600/90 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                                Server: ${item.server}
+                            </div>
+                        </div>
+
+                        <!-- Card Info -->
+                        <div class="p-4 space-y-2">
+                            <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug hover:text-purple-300 cursor-pointer" onclick="openDetailModal('${item.id}')">
+                                ${item.title}
+                            </h3>
+                            <p class="text-xs text-slate-400 line-clamp-2">${item.description}</p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer & Price -->
+                    <div class="p-4 pt-0 space-y-3">
+                        <div class="flex items-center justify-between border-t border-slate-800/80 pt-3">
+                            <div>
+                                <span class="text-[10px] text-slate-500 block">Harga Akun</span>
+                                <span class="text-base font-extrabold text-emerald-400">Rp ${item.price.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] text-slate-500 block">Penjual</span>
+                                <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-user-check text-indigo-400 text-[10px] mr-1"></i>${item.seller}</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="openDetailModal('${item.id}')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 rounded-xl text-xs transition">
+                                Detail
+                            </button>
+                            <a href="https://wa.me/${ADMIN_WA}?text=Halo%20Admin%20Madan,%20saya%20tertarik%20membeli%20akun%20${encodeURIComponent(item.game)}:%20${encodeURIComponent(item.title)}%20seharga%20Rp%20${item.price.toLocaleString('id-ID')}" target="_blank" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 transition shadow-md">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Beli via Madan</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategoryFilter = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = "cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-purple-600 text-white transition-all";
+                } else {
+                    btn.className = "cat-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
+                }
+            });
+            renderListings();
+        }
+
+        function filterListings() {
+            renderListings();
+        }
+
+        function handleCreateListing(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            const newListing = {
+                id: 'list-' + Date.now(),
+                game: document.getElementById('listingGameSelect').value,
+                title: document.getElementById('listingTitleInput').value,
+                price: parseInt(document.getElementById('listingPriceInput').value) || 0,
+                server: document.getElementById('listingServerInput').value || 'Global/Asia',
+                seller: currentUser.username,
+                image: document.getElementById('listingImageInput').value || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80',
+                description: document.getElementById('listingDescInput').value,
+                badge: 'Baru',
+                date: 'Baru saja'
+            };
+
+            listings.unshift(newListing);
+            localStorage.setItem('madan_listings', JSON.stringify(listings));
+            renderListings();
+            closeModal('createListingModal');
+            showToast('Berhasil memposting akun ke Marketplace!');
+        }
+
+        function openDetailModal(id) {
+            const item = listings.find(l => l.id === id);
+            if (!item) return;
+
+            const modalContent = document.getElementById('detailModalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="relative rounded-2xl overflow-hidden bg-slate-900 max-h-[300px]">
+                        <img src="${item.image}" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-xl shadow">
+                            ${item.game}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="text-xs text-slate-400">Server: ${item.server} • Penjual: ${item.seller}</span>
+                        <h2 class="text-xl font-bold text-white mt-1">${item.title}</h2>
+                        <div class="text-2xl font-black text-emerald-400 mt-2">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Spesifikasi Lengkap Akun</h4>
+                        <p class="text-sm text-slate-300 whitespace-pre-line leading-relaxed">${item.description}</p>
+                    </div>
+
+                    <div class="bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-2xl space-y-2">
+                        <div class="flex items-center space-x-2 text-indigo-300 font-bold text-sm">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                            <span>Jaminan Transaksi Aman via Rekber Madan</span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Pembayaran akan ditampung oleh Admin Madan. Setelah akun diverifikasi & amankan oleh pembeli, dana baru diteruskan ke penjual.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <a href="https://wa.me/${ADMIN_WA}?text=Halo%20Admin%20Madan,%20saya%20mau%20order%20akun%20${encodeURIComponent(item.game)}:%20${encodeURIComponent(item.title)}%20(ID:%20${item.id})" target="_blank" class="flex-grow bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center space-x-2 transition shadow-lg">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Beli Akun Ini Via WhatsApp Admin Madan</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+            openModal('detailModal');
+        }
+
+
+        // --- COMMUNITY FEED LOGIC ---
+        function renderCommunityFeed() {
+            const container = document.getElementById('communityFeedContainer');
+            container.innerHTML = posts.map(post => `
+                <div class="glass p-5 rounded-3xl space-y-4">
+                    <!-- Post Header -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="${post.avatar}" class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700">
+                            <div>
+                                <h4 class="font-bold text-sm text-white">${post.author}</h4>
+                                <span class="text-[11px] text-slate-500">${post.time}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <p class="text-sm text-slate-200 leading-relaxed">${post.content}</p>
+
+                    <!-- Image if exists -->
+                    ${post.image ? `
+                        <div class="rounded-2xl overflow-hidden bg-slate-900 border border-slate-800/80 max-h-[400px]">
+                            <img src="${post.image}" class="w-full h-full object-cover">
+                        </div>
+                    ` : ''}
+
+                    <!-- Actions Bar -->
+                    <div class="flex items-center space-x-6 border-t border-slate-800/80 pt-3 text-xs text-slate-400">
+                        <button onclick="likePost('${post.id}')" class="hover:text-pink-400 flex items-center space-x-1.5 transition">
+                            <i class="fa-regular fa-heart text-sm"></i>
+                            <span>${post.likes} Suka</span>
+                        </button>
+                        <div class="flex items-center space-x-1.5">
+                            <i class="fa-regular fa-comment text-sm"></i>
+                            <span>${post.comments.length} Komentar</span>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="space-y-2 pt-2">
+                        ${post.comments.map(c => `
+                            <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 text-xs">
+                                <span class="font-bold text-purple-300 mr-2">${c.name}:</span>
+                                <span class="text-slate-300">${c.text}</span>
+                            </div>
+                        `).join('')}
+
+                        <!-- Comment Input Box -->
+                        <form onsubmit="handleAddComment(event, '${post.id}')" class="flex gap-2 pt-1">
+                            <input type="text" placeholder="Tulis komentar..." required class="comment-input-${post.id} flex-grow bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                Kirim
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleCreatePost(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                author: currentUser.username,
+                avatar: currentUser.avatar,
+                time: 'Baru saja',
+                content: document.getElementById('postContentInput').value,
+                image: document.getElementById('postImageInput').value || null,
+                likes: 0,
+                comments: []
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('madan_posts', JSON.stringify(posts));
+            renderCommunityFeed();
+            closeModal('createPostModal');
+            showToast('Postingan berhasil dipublikasikan di Komunitas!');
+        }
+
+        function likePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                localStorage.setItem('madan_posts', JSON.stringify(posts));
+                renderCommunityFeed();
+            }
+        }
+
+        function handleAddComment(e, postId) {
+            e.preventDefault();
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            const inputEl = document.querySelector(`.comment-input-${postId}`);
+            const commentText = inputEl.value.trim();
+            if (!commentText) return;
+
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.comments.push({
+                    name: currentUser.username,
+                    text: commentText
+                });
+                localStorage.setItem('madan_posts', JSON.stringify(posts));
+                renderCommunityFeed();
+            }
+        }
+
+
+        // --- LIVE AI CHATBOT LOGIC ---
+        function toggleAIChat() {
+            const chatBox = document.getElementById('aiChatBox');
+            chatBox.classList.toggle('hidden');
+        }
+
+        function sendQuickQuestion(questionText) {
+            document.getElementById('aiChatInput').value = questionText;
+            handleAIChatSubmit(new Event('submit'));
+        }
+
+        function handleAIChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiChatInput');
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+
+            // Render User Bubble
+            messagesContainer.innerHTML += `
+                <div class="flex items-start justify-end space-x-2">
+                    <div class="bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none text-xs max-w-[80%]">
+                        ${escapeHtml(userMsg)}
+                    </div>
+                </div>
+            `;
+
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Generate AI Response
+            setTimeout(() => {
+                let aiReply = getAIResponse(userMsg);
+                messagesContainer.innerHTML += `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs flex-shrink-0">
+                            AI
+                        </div>
+                        <div class="bg-slate-800 border border-slate-700/80 p-3 rounded-2xl rounded-tl-none text-slate-200 space-y-1.5 max-w-[85%]">
+                            ${aiReply}
+                        </div>
+                    </div>
+                `;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 600);
+        }
+
+        function getAIResponse(msg) {
+            const lower = msg.toLowerCase();
+
+            if (lower.includes('admin') || lower.includes('madan') || lower.includes('kontak') || lower.includes('wa') || lower.includes('nomor')) {
+                return `Owner & Admin resmi website ini adalah <strong>Madan</strong>.<br>📱 WhatsApp Official: <a href="https://wa.me/${ADMIN_WA}" target="_blank" class="text-emerald-400 underline font-bold">+${ADMIN_WA}</a>.<br>Jam operasional rekber: 24 Jam Fast Response!`;
+            } else if (lower.includes('rekber') || lower.includes('aman') || lower.includes('cara beli') || lower.includes('transaksi')) {
+                return `<strong>Panduan Transaksi Safe Trade (Rekber):</strong><br>1. Pilih akun di menu Marketplace.<br>2. Klik tombol <em>"Beli via Madan"</em>.<br>3. Transfer pembayaran ke Admin Madan.<br>4. Admin memeriksa data akun dari penjual & mengamankannya.<br>5. Akun diserahkan ke pembeli. Setelah pembeli konfirmasi, dana diteruskan ke penjual. 🛡️`;
+            } else if (lower.includes('genshin') || lower.includes('zzz') || lower.includes('hsr') || lower.includes('ml') || lower.includes('pubg') || lower.includes('ff')) {
+                return `Kami menyediakan kategori lengkap untuk game tersebut! Kamu bisa memfilter game di tab **Jual Beli Akun** atau memposting status gacha kamu di tab **Komunitas**.`;
+            } else {
+                return `Terima kasih sudah bertanya! Kamu bisa menanyakan seputar keamanan rekber, nomor WhatsApp Admin Madan, atau cara memposting akun game kamu di Madan Store. 😊`;
+            }
+        }
+
+
+        // --- UTILITY FUNCTIONS ---
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-5 z-50 bg-purple-600 text-white font-medium text-xs px-4 py-3 rounded-2xl shadow-2xl border border-purple-400/40 animate-bounce';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
